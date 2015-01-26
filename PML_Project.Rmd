@@ -139,7 +139,7 @@ In eval(expr, envir, enclos) :
 
 ## Decision Tree ##
 
-Using "rpart()" - recursive partitioning for classification,regression and survival trees.  The resulting model yielded an accuracy of 87.09%.  The out of sample error is expected to be 12.91%.
+Using "rpart()" - recursive partitioning for classification,regression and survival trees.  The resulting model yielded an accuracy of 87.09%.  The out of sample error is expected to be 12.91%.  For the purposes of this analysis cross-validation was not considered for rpart() as the randomForest() model documented next, adequately predicted the outcomes. 
 
 ```{r}
 #library(rpart)
@@ -168,7 +168,9 @@ confusionMatrix(predictrpart2, workingTesting$classe)
 
 ## Random Forests ##
 
-Using "randomForest()".  The resulting model yielded an accuracy of 99.81%.  The out of sample error is expected to be .19%.  Note: 'train(classe ~ ., data=workingTraing, method="rf")', failed and was not pursued.
+Using "randomForest()".  The resulting model yielded an accuracy of 99.81%.  The out of sample error is expected to be .19%.  With randomForest(), there is no need for cross-validation or a separate test set to get an unbiased estimate of the test set error as it is estimated automatically as part of the the function.  rfcv() is one way that can be used to show the cross-validated perdiction performance.  
+
+Note: 'train(classe ~ ., data=workingTraing, method="rf")', failed and was not pursued.
 
 ```{r}
 #library(randomForest)
@@ -235,10 +237,12 @@ finalPredictionrf2
 ```
 
 ### Out of Sample Error Discussion ###
+
 The randomForest model was expected to yield an accuracy of 99.81%, therefore an out of sample error rate of approximately .19% was expected.  The model did better than expected against the testingData dataset yielding 100% accuracy.  The rpart model was expected to yield an accuracy of 87.09%, therefore an out of sample error rate of approximately 12.91% was expected.  This model also did better than expected against the testingData dataset yielding 90% accuracy.  The testingData dataset consisted of 20 observations.  Had the testingData dataset been larger, it is likely that the actual accuracy in both cases would have been closer to the calculated accuracies and perhaps lower. 
 
 
 ### Prediction Assignment Submission ###
+
 pml_write_files = function(x){
   n = length(x)
   for(i in 1:n){
